@@ -1,0 +1,18 @@
+{
+  "name": "Crystal Palace Easter Hunt",
+  "short_name": "Easter Hunt",
+  "description": "Easter scavenger hunt around Crystal Palace Park",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#e07baa",
+  "background_color": "#FFF8F0",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

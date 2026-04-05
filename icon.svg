@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#FFF8F0"/>
+  <!-- Egg shape -->
+  <ellipse cx="256" cy="240" rx="130" ry="160" fill="#e07baa"/>
+  <!-- Stripe -->
+  <path d="M130 210 Q256 170 382 210 Q256 250 130 210Z" fill="#F9C6D0"/>
+  <path d="M128 260 Q256 220 384 260 Q256 300 128 260Z" fill="#D4C5F9"/>
+</svg>

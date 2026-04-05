@@ -85,20 +85,47 @@ body.sheet-open #map {
   letter-spacing: -0.02em;
 }
 
+#header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
 #score-display {
   display: flex;
   align-items: center;
-  gap: 5px;
-  font-size: 0.9rem;
+  gap: 4px;
+  font-size: 0.85rem;
   font-weight: 700;
   background: var(--color-yellow);
-  padding: 5px 14px;
+  padding: 5px 12px;
   border-radius: 20px;
   color: var(--color-text);
+  white-space: nowrap;
 }
 
 #score-value {
-  font-size: 1rem;
+  font-size: 0.95rem;
+}
+
+#instructions-btn {
+  background: none;
+  border: 1.5px solid rgba(224, 123, 170, 0.4);
+  border-radius: 20px;
+  padding: 5px 11px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  cursor: pointer;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background 0.15s;
+}
+
+#instructions-btn:active {
+  background: var(--color-pink);
 }
 
 /* ── Backdrop ──────────────────────────────────────────────── */
@@ -362,13 +389,63 @@ body.sheet-open #bottom-sheet {
   display: none;
 }
 
+/* Bonus items are now tappable labels wrapping a hidden checkbox */
 .bonus-item {
   display: flex;
   align-items: flex-start;
-  gap: 9px;
+  gap: 8px;
   font-size: 0.8rem;
   line-height: 1.4;
   color: var(--color-text);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  padding: 2px 0;
+  user-select: none;
+}
+
+.bonus-checkbox {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+.bonus-check-indicator {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.7);
+  margin-top: 1px;
+  position: relative;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+/* Checkmark via pseudo-element */
+.bonus-check-indicator::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 2px;
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+  transform: rotate(-45deg);
+  transition: border-color 0.12s;
+}
+
+.bonus-checkbox:checked + .bonus-check-indicator {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.bonus-checkbox:checked + .bonus-check-indicator::after {
+  border-left-color: white;
+  border-bottom-color: white;
 }
 
 .bonus-pts-badge {
@@ -381,6 +458,12 @@ body.sheet-open #bottom-sheet {
   border-radius: 10px;
   margin-top: 1px;
   white-space: nowrap;
+  transition: opacity 0.15s;
+}
+
+/* Dim the badge when not ticked */
+.bonus-item:has(.bonus-checkbox:not(:checked)) .bonus-pts-badge {
+  opacity: 0.45;
 }
 
 /* ── Location marker ───────────────────────────────────────── */
@@ -477,6 +560,99 @@ body.sheet-open #bottom-sheet {
 .maze-btn-stop {
   background: #c0607f;
   color: white;
+}
+
+/* ── Instructions overlay ──────────────────────────────────── */
+
+#instructions-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 20px;
+}
+
+#instructions-overlay[hidden] {
+  display: none;
+}
+
+#instructions-card {
+  background: var(--color-cream);
+  border-radius: 22px;
+  padding: 28px 24px 24px;
+  max-width: 380px;
+  width: 100%;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.25);
+}
+
+#instructions-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-accent);
+  margin-bottom: 16px;
+}
+
+#instructions-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 0;
+}
+
+#instructions-list li {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  padding-left: 20px;
+  position: relative;
+  color: var(--color-text);
+}
+
+#instructions-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+#instructions-maze {
+  background: var(--color-yellow);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+#instructions-maze strong:first-child {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+#instructions-close {
+  width: 100%;
+  padding: 13px;
+  background: var(--color-accent);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background 0.15s, transform 0.1s;
+}
+
+#instructions-close:active {
+  background: var(--color-accent-dark);
+  transform: scale(0.98);
 }
 
 /* ── Leaflet attribution override ──────────────────────────── */

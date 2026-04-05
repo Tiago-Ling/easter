@@ -18,14 +18,15 @@ function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(STATE_KEY));
     return {
-      completed:  {},
-      score:      0,
-      path:       [],   // [[lat, lng, timestamp], ...]
-      mazeTimer:  { startedAt: null, stoppedAt: null },
+      completed:        {},
+      bonuses:          {},   // { [taskId]: { [bonusIndex]: true } }
+      seenInstructions: false,
+      path:             [],
+      mazeTimer:        { startedAt: null, stoppedAt: null },
       ...saved,
     };
   } catch {
-    return { completed: {}, score: 0, path: [], mazeTimer: { startedAt: null, stoppedAt: null } };
+    return { completed: {}, bonuses: {}, seenInstructions: false, path: [], mazeTimer: { startedAt: null, stoppedAt: null } };
   }
 }
 
@@ -93,8 +94,17 @@ document.addEventListener('keydown', e => {
 const scoreEl    = document.getElementById('score-value');
 const progressEl = document.getElementById('task-progress');
 
+function calcScore() {
+  return TASKS.reduce((total, task) => {
+    if (!state.completed[task.id]) return total;
+    const ticked   = state.bonuses[task.id] || {};
+    const bonusPts = task.bonuses.reduce((sum, b, i) => sum + (ticked[i] ? b.points : 0), 0);
+    return total + BASE_POINTS + bonusPts;
+  }, 0);
+}
+
 function updateScoreDisplay() {
-  scoreEl.textContent = state.score;
+  scoreEl.textContent = calcScore();
   const done = Object.keys(state.completed).length;
   progressEl.textContent = `${done} / ${TASKS.length} complete`;
 }
@@ -119,6 +129,8 @@ function renderTasks() {
     card.dataset.color  = task.color;
     card.setAttribute('role', 'listitem');
 
+    const taskBonuses = state.bonuses[task.id] || {};
+
     card.innerHTML = `
       <div class="task-card-main">
         <div class="task-status">
@@ -142,31 +154,38 @@ function renderTasks() {
             aria-expanded="false"
             aria-controls="bonuses-${task.id}"
           >
-            Bonus items (${task.bonuses.length})
+            Bonus challenges (${task.bonuses.length})
             <span class="bonus-pts">+${totalPts} pts</span>
           </button>
         </div>
       </div>
       <div class="bonus-list" id="bonuses-${task.id}" hidden>
-        ${task.bonuses.map(b => `
-          <div class="bonus-item">
+        ${task.bonuses.map((b, i) => `
+          <label class="bonus-item" for="bonus-${task.id}-${i}">
+            <input
+              type="checkbox"
+              class="bonus-checkbox"
+              id="bonus-${task.id}-${i}"
+              data-task="${task.id}"
+              data-index="${i}"
+              ${taskBonuses[i] ? 'checked' : ''}
+            >
+            <span class="bonus-check-indicator"></span>
             <span class="bonus-pts-badge">+${b.points}</span>
-            <p>${b.description}</p>
-          </div>
+            <span>${b.description}</span>
+          </label>
         `).join('')}
       </div>
     `;
 
-    // Checkbox — toggle completion and score
+    // Task checkbox — toggle completion, recalculate score
     const checkbox = card.querySelector('.task-checkbox');
     checkbox.addEventListener('change', () => {
       if (checkbox.checked) {
         state.completed[task.id] = true;
-        state.score += BASE_POINTS;
         card.classList.add('completed');
       } else {
         delete state.completed[task.id];
-        state.score = Math.max(0, state.score - BASE_POINTS);
         card.classList.remove('completed');
       }
       saveState(state);
@@ -180,6 +199,27 @@ function renderTasks() {
       const expanded = bonusBtn.getAttribute('aria-expanded') === 'true';
       bonusBtn.setAttribute('aria-expanded', String(!expanded));
       expanded ? bonusList.setAttribute('hidden', '') : bonusList.removeAttribute('hidden');
+    });
+
+    // Auto-expand if any bonus is already ticked
+    if (Object.values(taskBonuses).some(Boolean)) {
+      bonusBtn.setAttribute('aria-expanded', 'true');
+      bonusList.removeAttribute('hidden');
+    }
+
+    // Bonus checkboxes — save state and recalculate score
+    card.querySelectorAll('.bonus-checkbox').forEach(cb => {
+      cb.addEventListener('change', () => {
+        const i = Number(cb.dataset.index);
+        if (!state.bonuses[task.id]) state.bonuses[task.id] = {};
+        if (cb.checked) {
+          state.bonuses[task.id][i] = true;
+        } else {
+          delete state.bonuses[task.id][i];
+        }
+        saveState(state);
+        updateScoreDisplay();
+      });
     });
 
     // Maze-specific stopwatch (Task 4 only)
@@ -308,6 +348,28 @@ function buildMazeTimer(card) {
   });
 }
 
+// ── Instructions ─────────────────────────────────────────────
+
+const instructionsOverlay = document.getElementById('instructions-overlay');
+
+function showInstructions() {
+  instructionsOverlay.removeAttribute('hidden');
+}
+
+function hideInstructions() {
+  instructionsOverlay.setAttribute('hidden', '');
+  state.seenInstructions = true;
+  saveState(state);
+}
+
+document.getElementById('instructions-btn').addEventListener('click', showInstructions);
+document.getElementById('instructions-close').addEventListener('click', hideInstructions);
+
+// Tap outside the card to dismiss
+instructionsOverlay.addEventListener('click', e => {
+  if (e.target === instructionsOverlay) hideInstructions();
+});
+
 // ── Wake lock ────────────────────────────────────────────────
 // Keeps the screen on while the app is open.
 // Re-acquires automatically when the user returns to the tab,
@@ -334,6 +396,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initLocationTracking(map);
   requestWakeLock();
   sheet.setAttribute('aria-hidden', 'true');
+
+  if (!state.seenInstructions) showInstructions();
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});

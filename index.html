@@ -29,11 +29,14 @@
   <!-- Layer 1: Fullscreen map -->
   <div id="map" aria-label="Crystal Palace Park map" role="application"></div>
 
-  <!-- Layer 2: Fixed header with score -->
+  <!-- Layer 2: Fixed header with score + instructions button -->
   <header id="app-header">
     <h1>🐣 Easter Hunt</h1>
-    <div id="score-display" aria-live="polite" aria-atomic="true">
-      <span id="score-value">0</span> pts
+    <div id="header-right">
+      <div id="score-display" aria-live="polite" aria-atomic="true">
+        <span id="score-value">0</span> pts
+      </div>
+      <button id="instructions-btn" aria-label="Show instructions">Instructions</button>
     </div>
   </header>
 
@@ -65,6 +68,24 @@
     aria-expanded="false"
     aria-controls="bottom-sheet"
   >🥚</button>
+
+  <!-- Instructions overlay -->
+  <div id="instructions-overlay" role="dialog" aria-modal="true" aria-labelledby="instructions-title" hidden>
+    <div id="instructions-card">
+      <h2 id="instructions-title">How to play 🐣</h2>
+      <ul id="instructions-list">
+        <li>Complete a task and tick it off to earn <strong>10 points</strong>.</li>
+        <li>Each task has <strong>bonus challenges</strong> — tap "Bonus challenges" to expand them. Tick the ones you completed <em>before</em> (or after) marking the task done.</li>
+        <li>Only ticked bonuses add to your score.</li>
+        <li>iOS: Click the \"... -> Share -> Add to Home Screen\" if you want the app to run in fullscreen (no browser bars).</li>
+      </ul>
+      <div id="instructions-maze">
+        <strong>⏱ The maze (Task 4)</strong>
+        <p>Tap <strong>▶ Start</strong> the moment you enter the maze and <strong>■ Stop</strong> the moment you exit. Your time is saved even if you leave the app.</p>
+      </div>
+      <button id="instructions-close" touch-action="manipulation">Let's go! 🐰</button>
+    </div>
+  </div>
 
   <!-- Leaflet JS -->
   <script

@@ -334,4 +334,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initLocationTracking(map);
   requestWakeLock();
   sheet.setAttribute('aria-hidden', 'true');
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
 });

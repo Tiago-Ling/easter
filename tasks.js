@@ -7,7 +7,7 @@ export const TASKS = [
     bonuses: [
       { description: "Photograph all 6 sphinxes", points: 10 },
       { description: "Strike your best Egyptian pose in one of the photos", points: 5 },
-      { description: "Take a selfie with a sphinx as your \"twin\"", points: 5 },
+      { description: "Take a selfie with a sphinx as your \"twin\" in one of the photos", points: 5 },
     ],
   },
   {
@@ -17,8 +17,8 @@ export const TASKS = [
     color: "lavender",
     bonuses: [
       { description: "Also find and photograph an ichthyosaur", points: 5 },
-      { description: "Find the Iguanodon — the one with a \"horn\" mistakenly placed on its nose", points: 5 },
-      { description: "Name the Victorian sculptor who made them (one name accepted)", points: 5 },
+      { description: "Find the Iguanodon — and take a close-up shot of its face", points: 5 },
+      { description: "Record your best dinosaur impression in a video, with the other dinos as your background (min. 15 seconds)", points: 10 },
     ],
   },
   {
@@ -48,8 +48,8 @@ export const TASKS = [
     description: "Climb the Italian Terraces from the very bottom to the very top and count every single step along the way.",
     color: "peach",
     bonuses: [
-      { description: "Submit the correct total step count", points: 5 },
-      { description: "Video montage of walking up & down the steps", points: 5 },
+      { description: "Count and report the total number of steps in the terrace", points: 5 },
+      { description: "Video montage of walking up & down the steps (min. 15 secs)", points: 5 },
       { description: "Walk the steps backwards so the montage looks \"normal\" when played in reverse", points: 10 },
     ],
   },

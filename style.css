@@ -231,16 +231,33 @@ body.sheet-open #bottom-sheet {
   border-bottom: 1px solid rgba(0, 0, 0, 0.07);
 }
 
+#sheet-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 #sheet-header h2 {
   font-size: 1.1rem;
   font-weight: 800;
   color: var(--color-accent);
 }
 
+#maze-summary {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-accent-dark);
+}
+
+#maze-summary[hidden] {
+  display: none;
+}
+
 #task-progress {
   font-size: 0.8rem;
   color: var(--color-text-muted);
   font-weight: 500;
+  text-align: right;
 }
 
 /* ── Task List ─────────────────────────────────────────────── */

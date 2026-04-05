@@ -107,6 +107,14 @@ function updateScoreDisplay() {
   scoreEl.textContent = calcScore();
   const done = Object.keys(state.completed).length;
   progressEl.textContent = `${done} / ${TASKS.length} complete`;
+
+  // Show maze time in the sheet header once the timer has been stopped
+  const mazeSummary = document.getElementById('maze-summary');
+  if (state.mazeTimer.startedAt && state.mazeTimer.stoppedAt) {
+    const elapsed = state.mazeTimer.stoppedAt - state.mazeTimer.startedAt;
+    document.getElementById('maze-summary-time').textContent = formatElapsed(elapsed);
+    mazeSummary.removeAttribute('hidden');
+  }
 }
 
 // ── Task rendering ───────────────────────────────────────────
@@ -345,6 +353,7 @@ function buildMazeTimer(card) {
     startBtn.disabled = true;
     const elapsed = state.mazeTimer.stoppedAt - state.mazeTimer.startedAt;
     display.textContent = formatElapsed(elapsed);
+    updateScoreDisplay(); // surfaces the time in the sheet header
   });
 }
 

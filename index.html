@@ -31,7 +31,7 @@
 
   <!-- Layer 2: Fixed header with score + instructions button -->
   <header id="app-header">
-    <h1>🐣 Easter Hunt</h1>
+    <h1>🐣 Crystal Palace Park Easter Game - 2026 Edition</h1>
     <div id="header-right">
       <div id="score-display" aria-live="polite" aria-atomic="true">
         <span id="score-value">0</span> pts
@@ -54,7 +54,10 @@
     <div id="sheet-handle-bar" aria-hidden="true"></div>
 
     <div id="sheet-header">
-      <h2>Your Tasks</h2>
+      <div id="sheet-header-left">
+        <h2>Your Tasks</h2>
+        <div id="maze-summary" hidden>⏱ Maze: <strong id="maze-summary-time"></strong></div>
+      </div>
       <span id="task-progress" aria-live="polite">0 / 8 complete</span>
     </div>
 
@@ -77,7 +80,7 @@
         <li>Complete a task and tick it off to earn <strong>10 points</strong>.</li>
         <li>Each task has <strong>bonus challenges</strong> — tap "Bonus challenges" to expand them. Tick the ones you completed <em>before</em> (or after) marking the task done.</li>
         <li>Only ticked bonuses add to your score.</li>
-        <li>iOS: Click the \"... -> Share -> Add to Home Screen\" if you want the app to run in fullscreen (no browser bars).</li>
+        <li>iOS: Click the "..." -> "Share" -> "Add to Home Screen" if you want the app to run in fullscreen (no browser bars).</li>
       </ul>
       <div id="instructions-maze">
         <strong>⏱ The maze (Task 4)</strong>

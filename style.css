@@ -383,6 +383,102 @@ body.sheet-open #bottom-sheet {
   white-space: nowrap;
 }
 
+/* ── Location marker ───────────────────────────────────────── */
+
+.loc-dot {
+  position: absolute;
+  inset: 4px;
+  background: #e07baa;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  z-index: 1;
+}
+
+.loc-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(224, 123, 170, 0.35);
+  animation: loc-ping 1.8s ease-out infinite;
+}
+
+@keyframes loc-ping {
+  0%   { transform: scale(1);   opacity: 0.8; }
+  80%  { transform: scale(2.4); opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* ── Maze timer ────────────────────────────────────────────── */
+
+.maze-timer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  padding: 9px 11px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 10px;
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+}
+
+.maze-timer-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.maze-timer-display {
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-accent-dark);
+  letter-spacing: 0.02em;
+  flex: 1;
+  text-align: right;
+}
+
+.maze-timer-controls {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+
+.maze-btn {
+  flex: 1;
+  padding: 7px 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.maze-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.maze-btn:not(:disabled):active {
+  transform: scale(0.95);
+}
+
+.maze-btn-start {
+  background: var(--color-accent);
+  color: white;
+}
+
+.maze-btn-stop {
+  background: #c0607f;
+  color: white;
+}
+
 /* ── Leaflet attribution override ──────────────────────────── */
 /* Keep it visible but unobtrusive */
 .leaflet-control-attribution {
